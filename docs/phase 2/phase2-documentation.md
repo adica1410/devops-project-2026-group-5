@@ -123,11 +123,11 @@ The application was then manually started using the required environment variabl
 
 cd /home/ubuntu/resources/codebase_partner
 
-export APP_DB_HOST=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-export APP_DB_USER=nodeapp
-export APP_DB_PASSWORD=student12
-export APP_DB_NAME=STUDENTS
-export APP_PORT=80
+APP_DB_HOST=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+APP_DB_USER=your_db_user_here
+APP_DB_PASSWORD=your_db_password_here
+APP_DB_NAME=your_db_name_here
+APP_PORT=your_app_port_here
 
 sudo -E npm start
 
