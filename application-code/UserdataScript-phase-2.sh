@@ -22,14 +22,27 @@ mysql -u root -e "USE STUDENTS; CREATE TABLE students(
 sed -i 's/.*bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl enable mysql
 service mysql restart
-export APP_DB_HOST=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-export APP_DB_USER=nodeapp
-export APP_DB_PASSWORD=student12
-export APP_DB_NAME=STUDENTS
-export APP_PORT=80
+
+cat > /home/ubuntu/resources/codebase_partner/.env <<EOF
+APP_DB_HOST=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+APP_DB_USER=nodeapp
+APP_DB_PASSWORD=student12
+APP_DB_NAME=STUDENTS
+APP_PORT=80
+EOF
+
+chmod 600 /home/ubuntu/resources/codebase_partner/.env
+
+set -a
+source /home/ubuntu/resources/codebase_partner/.env
+set +a
+
 npm start &
+
 echo '#!/bin/bash -xe
 cd /home/ubuntu/resources/codebase_partner
-export APP_PORT=80
+set -a
+source /home/ubuntu/resources/codebase_partner/.env
+set +a
 npm start' > /etc/rc.local
 chmod +x /etc/rc.local
